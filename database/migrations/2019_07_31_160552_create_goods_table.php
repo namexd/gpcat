@@ -35,9 +35,9 @@ class CreateGoodsTable extends Migration
             $table->float('width',8,3)->comment('轴承宽度');
             $table->float('weight',8,3)->comment('轴承重量');
             $table->text('days')->comment('货期');
-            $table->text('comment')->comment('备注');
-            $table->text('extra1')->comment('备用字段1');
-            $table->text('extra2')->comment('备用字段2');
+            $table->text('comment')->comment('备注')->nullable();
+            $table->text('extra1')->comment('备用字段1')->nullable();
+            $table->text('extra2')->comment('备用字段2')->nullable();
             $table->timestamps();
         });
     }

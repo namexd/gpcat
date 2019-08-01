@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Post\ImportPost;
+use App\Admin\Extensions\PostsExporter;
 use App\Models\Good;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -24,35 +26,41 @@ class GoodsController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Good);
-
-        $grid->column('id', trans('Id'));
-        $grid->column('brand', trans('admin.Brand'));
-        $grid->column('image', trans('admin.Image'));
-        $grid->column('type', trans('admin.Type'));
-        $grid->column('model', trans('admin.Model'));
-        $grid->column('number', trans('admin.Number'));
-        $grid->column('unit', trans('admin.Unit'));
-        $grid->column('product_area', trans('admin.Product area'));
-        $grid->column('price', trans('admin.Price'));
-        $grid->column('price_a', trans('admin.Price a'));
-        $grid->column('price_b', trans('admin.Price b'));
-        $grid->column('package', trans('admin.Package'));
-        $grid->column('supplier', trans('admin.Supplier'));
-        $grid->column('repository', trans('admin.Repository'));
-        $grid->column('oil', trans('admin.Oil'));
-        $grid->column('size', trans('admin.Size'));
-        $grid->column('inner_diameter', trans('admin.Inner diameter'));
-        $grid->column('out_diameter', trans('admin.Out diameter'));
-        $grid->column('width', trans('admin.Width'));
-        $grid->column('weight', trans('admin.Weight'));
-        $grid->column('days', trans('admin.Days'));
-        $grid->column('comment', trans('admin.Comment'));
-        $grid->column('extra1', trans('admin.Extra1'));
-        $grid->column('extra2', trans('admin.Extra2'));
-        $grid->column('created_at', trans('admin.Created at'));
-        $grid->column('updated_at', trans('admin.Updated at'));
-
+        $good=new Good;
+        $grid = new Grid($good);
+        $grid->actions(function ($action){
+           $action->disableDelete();
+        });
+        $grid->column('id', __('Id'));
+        $grid->column('brand', __('Brand'))->filter($good->getFilters('brand'))->sortable();
+        $grid->column('image', __('Image'))->image();
+        $grid->column('type', __('Type'))->filter($good->getFilters('type'));
+        $grid->column('model', __('Model'))->filter($good->getFilters('model'));
+        $grid->column('number', __('Number'))->sortable();
+        $grid->column('unit', __('Unit'))->filter($good->getFilters('unit'));
+        $grid->column('product_area', __('Product area'))->filter($good->getFilters('product_area'));
+        $grid->column('price', __('Price'))->sortable();
+        $grid->column('price_a', __('Price a'))->sortable();
+        $grid->column('price_b', __('Price b'))->sortable();
+        $grid->column('package', __('Package'))->sortable();
+        $grid->column('supplier', __('Supplier'))->filter($good->getFilters('supplier'));
+        $grid->column('repository', __('Repository'))->filter($good->getFilters('repository'));
+        $grid->column('oil', __('Oil'))->sortable();
+        $grid->column('size', __('Size'))->filter($good->getFilters('size'))->sortable();
+        $grid->column('inner_diameter', __('Inner diameter'))->sortable();
+        $grid->column('out_diameter', __('Out diameter'))->sortable();
+        $grid->column('width', __('Width'))->sortable();
+        $grid->column('weight', __('Weight'))->sortable();
+        $grid->column('days', __('Days'))->filter($good->getFilters('days'))->sortable();
+        $grid->column('comment', __('Comment'));
+//        $grid->column('extra1', __('Extra1'));
+//        $grid->column('extra2', __('Extra2'));
+        $grid->column('created_at', __('Created at'));
+        $grid->column('updated_at', __('Updated at'));
+        $grid->tools(function (Grid\Tools $tools) {
+            $tools->append(new ImportPost());
+        });
+        $grid->exporter(new PostsExporter());
         return $grid;
     }
 
@@ -66,32 +74,32 @@ class GoodsController extends AdminController
     {
         $show = new Show(Good::findOrFail($id));
 
-        $show->field('id', trans('admin.Id'));
-        $show->field('brand', trans('admin.Brand'));
-        $show->field('image', trans('admin.Image'));
-        $show->field('type', trans('admin.Type'));
-        $show->field('model', trans('admin.Model'));
-        $show->field('number', trans('admin.Number'));
-        $show->field('unit', trans('admin.Unit'));
-        $show->field('product_area', trans('admin.Product area'));
-        $show->field('price', trans('admin.Price'));
-        $show->field('price_a', trans('admin.Price a'));
-        $show->field('price_b', trans('admin.Price b'));
-        $show->field('package', trans('admin.Package'));
-        $show->field('supplier', trans('admin.Supplier'));
-        $show->field('repository', trans('admin.Repository'));
-        $show->field('oil', trans('admin.Oil'));
-        $show->field('size', trans('admin.Size'));
-        $show->field('inner_diameter', trans('admin.Inner diameter'));
-        $show->field('out_diameter', trans('admin.Out diameter'));
-        $show->field('width', trans('admin.Width'));
-        $show->field('weight', trans('admin.Weight'));
-        $show->field('days', trans('admin.Days'));
-        $show->field('comment', trans('admin.Comment'));
-        $show->field('extra1', trans('admin.Extra1'));
-        $show->field('extra2', trans('admin.Extra2'));
-        $show->field('created_at', trans('admin.Created at'));
-        $show->field('updated_at', trans('admin.Updated at'));
+        $show->field('id', __('Id'));
+        $show->field('brand', __('Brand'));
+        $show->field('image', __('Image'));
+        $show->field('type', __('Type'));
+        $show->field('model', __('Model'));
+        $show->field('number', __('Number'));
+        $show->field('unit', __('Unit'));
+        $show->field('product_area', __('Product area'));
+        $show->field('price', __('Price'));
+        $show->field('price_a', __('Price a'));
+        $show->field('price_b', __('Price b'));
+        $show->field('package', __('Package'));
+        $show->field('supplier', __('Supplier'));
+        $show->field('repository', __('Repository'));
+        $show->field('oil', __('Oil'));
+        $show->field('size', __('Size'));
+        $show->field('inner_diameter', __('Inner diameter'));
+        $show->field('out_diameter', __('Out diameter'));
+        $show->field('width', __('Width'));
+        $show->field('weight', __('Weight'));
+        $show->field('days', __('Days'));
+        $show->field('comment', __('Comment'));
+//        $show->field('extra1', __('Extra1'));
+//        $show->field('extra2', __('Extra2'));
+        $show->field('created_at', __('Created at'));
+        $show->field('updated_at', __('Updated at'));
 
         return $show;
     }
@@ -105,29 +113,29 @@ class GoodsController extends AdminController
     {
         $form = new Form(new Good);
 
-        $form->text('brand', trans('admin.Brand'));
-        $form->text('image', trans('admin.Image'));
-        $form->text('type', trans('admin.Type'));
-        $form->text('model', trans('admin.Model'));
-        $form->number('number', trans('admin.Number'));
-        $form->text('unit', trans('admin.Unit'));
-        $form->text('product_area', trans('admin.Product area'));
-        $form->decimal('price', trans('admin.Price'));
-        $form->decimal('price_a', trans('admin.Price a'));
-        $form->decimal('price_b', trans('admin.Price b'));
-        $form->text('package', trans('admin.Package'));
-        $form->text('supplier', trans('admin.Supplier'));
-        $form->text('repository', trans('admin.Repository'));
-        $form->text('oil', trans('admin.Oil'));
-        $form->text('size', trans('admin.Size'));
-        $form->decimal('inner_diameter', trans('admin.Inner diameter'));
-        $form->decimal('out_diameter', trans('admin.Out diameter'));
-        $form->decimal('width', trans('admin.Width'));
-        $form->decimal('weight', trans('admin.Weight'));
-        $form->text('days', trans('admin.Days'));
-        $form->text('comment', trans('admin.Comment'));
-        $form->text('extra1', trans('admin.Extra1'));
-        $form->text('extra2', trans('admin.Extra2'));
+        $form->text('brand', __('Brand'));
+        $form->image('image', __('Image'));
+        $form->text('type', __('Type'));
+        $form->text('model', __('Model'));
+        $form->number('number', __('Number'));
+        $form->text('unit', __('Unit'));
+        $form->text('product_area', __('Product area'));
+        $form->decimal('price', __('Price'));
+        $form->decimal('price_a', __('Price a'));
+        $form->decimal('price_b', __('Price b'));
+        $form->text('package', __('Package'));
+        $form->text('supplier', __('Supplier'));
+        $form->text('repository', __('Repository'));
+        $form->text('oil', __('Oil'));
+        $form->text('size', __('Size'));
+        $form->decimal('inner_diameter', __('Inner diameter'));
+        $form->decimal('out_diameter', __('Out diameter'));
+        $form->decimal('width', __('Width'));
+        $form->decimal('weight', __('Weight'));
+        $form->text('days', __('Days'));
+        $form->text('comment', __('Comment'));
+//        $form->text('extra1', __('Extra1'));
+//        $form->text('extra2', __('Extra2'));
 
         return $form;
     }
