@@ -8,7 +8,11 @@ use App\Models\Good;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Layout\Column;
+use Encore\Admin\Layout\Row;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Box;
+use Encore\Admin\Widgets\InfoBox;
 
 class GoodsController extends AdminController
 {
@@ -33,7 +37,7 @@ class GoodsController extends AdminController
         });
         $grid->column('id', __('Id'));
         $grid->column('brand', __('Brand'))->filter($good->getFilters('brand'))->sortable();
-        $grid->column('image', __('Image'))->image();
+        $grid->column('image', __('Image'))->image('',100, 100);
         $grid->column('type', __('Type'))->filter($good->getFilters('type'));
         $grid->column('model', __('Model'))->filter($good->getFilters('model'));
         $grid->column('number', __('Number'))->sortable();
@@ -57,11 +61,37 @@ class GoodsController extends AdminController
 //        $grid->column('extra2', __('Extra2'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
+        $grid->header(function ($query) {
+            $suppliers = $query->groupBy('supplier')->count();
+            $numbers = $query->sum('number');
+            $brands = $query->groupBy('brand')->count();
+            $infoBox = new InfoBox('供应商数', 'users', 'aqua', '/admin/users', $suppliers);
+            $infoBox2 = new InfoBox('库存数', 'book', 'green', '', $numbers);
+            $infoBox3 = new InfoBox('品牌数', 'file', 'yellow', '', $brands);
+            $row=new Row();
+            $row->column(4, function (Column $column) use ($infoBox,$infoBox2,$infoBox3) {
+                $column->append($infoBox);
+            });
+
+            $row->column(4, function (Column $column) use ($infoBox,$infoBox2,$infoBox3) {
+                $column->append($infoBox2);
+            });
+
+            $row->column(4, function (Column $column) use ($infoBox,$infoBox2,$infoBox3) {
+                $column->append($infoBox3);
+            });
+          return new Row($row->render());
+
+        });
         $grid->tools(function (Grid\Tools $tools) {
             $tools->append(new ImportPost());
         });
         $grid->exporter(new PostsExporter());
         return $grid;
+    }
+    public function test()
+    {
+
     }
 
     /**
@@ -76,7 +106,7 @@ class GoodsController extends AdminController
 
         $show->field('id', __('Id'));
         $show->field('brand', __('Brand'));
-        $show->field('image', __('Image'));
+        $show->field('image', __('Image'))->image();
         $show->field('type', __('Type'));
         $show->field('model', __('Model'));
         $show->field('number', __('Number'));
