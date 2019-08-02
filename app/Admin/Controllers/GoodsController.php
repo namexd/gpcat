@@ -32,6 +32,39 @@ class GoodsController extends AdminController
     {
         $good=new Good;
         $grid = new Grid($good);
+        $grid->quickSearch('brand', 'model', 'supplier','repository');
+        $grid->filter(function($filter){
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+        });
+        $grid->header(function ($query) {
+            $suppliers = $query->groupBy('supplier')->get()->count();
+            $brands = $query->groupBy('brand')->get()->count();
+            $repositorys = $query->groupBy('repository')->get()->count();
+            $infoBox = new InfoBox($suppliers, 'users', 'aqua', '/admin/users', '供应商数');
+            $infoBox2 = new InfoBox($suppliers, 'users', 'aqua', '/admin/users', '仓库数');
+            $infoBox3 = new InfoBox($brands, 'file', 'yellow', 'javascript:;', '品牌数');
+            $infoBox4 = new InfoBox($brands, 'file', 'yellow', 'javascript:;', '金额');
+            $row=new Row();
+            $row->column(3, function (Column $column) use ($infoBox) {
+                $column->append($infoBox);
+            });
+            $row->column(3, function (Column $column) use ($infoBox3) {
+                $column->append($infoBox3);
+            });
+            $row->column(3, function (Column $column) use ($infoBox2) {
+                $column->append($infoBox2);
+            });
+            $row->column(3, function (Column $column) use ($infoBox4) {
+                $column->append($infoBox4);
+            });
+            return new Row($row->render());
+
+        });
+        $grid->tools(function (Grid\Tools $tools) {
+            $tools->append(new ImportPost());
+        });
+        $grid->exporter(new PostsExporter());
         $grid->actions(function ($action){
            $action->disableDelete();
         });
@@ -61,32 +94,7 @@ class GoodsController extends AdminController
 //        $grid->column('extra2', __('Extra2'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
-        $grid->header(function ($query) {
-            $suppliers = $query->groupBy('supplier')->count();
-            $numbers = $query->sum('number');
-            $brands = $query->groupBy('brand')->count();
-            $infoBox = new InfoBox('供应商数', 'users', 'aqua', '/admin/users', $suppliers);
-            $infoBox2 = new InfoBox('库存数', 'book', 'green', '', $numbers);
-            $infoBox3 = new InfoBox('品牌数', 'file', 'yellow', '', $brands);
-            $row=new Row();
-            $row->column(4, function (Column $column) use ($infoBox,$infoBox2,$infoBox3) {
-                $column->append($infoBox);
-            });
 
-            $row->column(4, function (Column $column) use ($infoBox,$infoBox2,$infoBox3) {
-                $column->append($infoBox2);
-            });
-
-            $row->column(4, function (Column $column) use ($infoBox,$infoBox2,$infoBox3) {
-                $column->append($infoBox3);
-            });
-          return new Row($row->render());
-
-        });
-        $grid->tools(function (Grid\Tools $tools) {
-            $tools->append(new ImportPost());
-        });
-        $grid->exporter(new PostsExporter());
         return $grid;
     }
     public function test()
