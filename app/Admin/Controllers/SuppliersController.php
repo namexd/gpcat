@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Post\ImportPost;
 use App\Admin\Extensions\PostsExporter;
 use App\Models\Good;
+use App\Models\Supplier;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -14,14 +15,14 @@ use Encore\Admin\Show;
 use Encore\Admin\Widgets\Box;
 use Encore\Admin\Widgets\InfoBox;
 
-class GoodsController extends AdminController
+class SuppliersController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = '商品';
+    protected $title = '供应商';
 
     /**
      * Make a grid builder.
@@ -30,67 +31,20 @@ class GoodsController extends AdminController
      */
     protected function grid()
     {
-        $good=new Good;
-        $grid = new Grid($good);
-        $grid->quickSearch('brand', 'model', 'supplier','repository');
-        $grid->filter(function($filter){
-            // 去掉默认的id过滤器
-            $filter->disableIdFilter();
-        });
-        $grid->header(function ($query) {
-            $suppliers = $query->groupBy('supplier')->get()->count();
-            $brands = $query->groupBy('brand')->get()->count();
-            $repositories = $query->groupBy('repository')->get()->count();
-            $prices=$query->sum('price');
-            $infoBox = new InfoBox($suppliers, 'users', 'aqua', '/admin/suppliers', '供应商数');
-            $infoBox2 = new InfoBox($repositories, 'cubes', 'green', 'javascript:;', '仓库数');
-            $infoBox3 = new InfoBox($brands, 'file', 'yellow', '/admin/brands', '品牌数');
-            $infoBox4 = new InfoBox($prices, 'money', 'red', 'javascript:;', '金额');
-            $row=new Row();
-            $row->column(3, function (Column $column) use ($infoBox) {
-                $column->append($infoBox);
-            });
-            $row->column(3, function (Column $column) use ($infoBox3) {
-                $column->append($infoBox3);
-            });
-            $row->column(3, function (Column $column) use ($infoBox2) {
-                $column->append($infoBox2);
-            });
-            $row->column(3, function (Column $column) use ($infoBox4) {
-                $column->append($infoBox4);
-            });
-            return new Row($row->render());
-
-        });
-        $grid->tools(function (Grid\Tools $tools) {
-            $tools->append(new ImportPost());
-        });
-        $grid->exporter(new PostsExporter());
+        $grid = new Grid(new Supplier());
+        $grid->disableExport();
+        $grid->disableActions();
+        $grid->disableCreateButton();
+        $grid->disableFilter();
+        $grid->disableTools();
+        $grid->disableRowSelector();
         $grid->column('id', __('Id'));
-        $grid->column('brand', __('Brand'))->filter($good->getFilters('brand'))->sortable();
-        $grid->column('image', __('Image'))->image('',100, 100);
-        $grid->column('type', __('Type'))->filter($good->getFilters('type'));
-        $grid->column('model', __('Model'))->filter($good->getFilters('model'));
+        $grid->column('supplier', __('Supplier'));
+        $grid->column('brand', __('BrandCount'))->sortable();
+        $grid->column('model', __('ModelCount'));
         $grid->column('number', __('Number'))->sortable();
-        $grid->column('unit', __('Unit'))->filter($good->getFilters('unit'));
-        $grid->column('product_area', __('Product area'))->filter($good->getFilters('product_area'));
         $grid->column('price', __('Price'))->sortable();
-        $grid->column('price_a', __('Price a'))->sortable();
-        $grid->column('price_b', __('Price b'))->sortable();
-        $grid->column('package', __('Package'))->sortable();
-        $grid->column('supplier', __('Supplier'))->filter($good->getFilters('supplier'));
-        $grid->column('repository', __('Repository'))->filter($good->getFilters('repository'));
-        $grid->column('oil', __('Oil'))->sortable();
-        $grid->column('size', __('Size'))->filter($good->getFilters('size'))->sortable();
-        $grid->column('inner_diameter', __('Inner diameter'))->sortable();
-        $grid->column('out_diameter', __('Out diameter'))->sortable();
-        $grid->column('width', __('Width'))->sortable();
-        $grid->column('weight', __('Weight'))->sortable();
-        $grid->column('days', __('Days'))->filter($good->getFilters('days'))->sortable();
-        $grid->column('comment', __('Comment'));
-//        $grid->column('extra1', __('Extra1'));
-//        $grid->column('extra2', __('Extra2'));
-        $grid->column('created_at', __('Created at'));
+        $grid->column('repository', __('RepositoryCount'));
         $grid->column('updated_at', __('Updated at'));
 
         return $grid;
