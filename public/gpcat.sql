@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-08-02 10:14:49
+Date: 2019-08-05 18:03:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -30,7 +30,7 @@ CREATE TABLE `admin_menu` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of admin_menu
@@ -43,6 +43,7 @@ INSERT INTO `admin_menu` VALUES ('5', '2', '5', '权限设置', 'fa-ban', 'auth/
 INSERT INTO `admin_menu` VALUES ('6', '2', '6', '菜单设置', 'fa-bars', 'auth/menu', null, null, '2019-07-31 15:55:23');
 INSERT INTO `admin_menu` VALUES ('7', '2', '7', '操作日志', 'fa-history', 'auth/logs', null, null, '2019-07-31 15:55:37');
 INSERT INTO `admin_menu` VALUES ('8', '0', '0', '商品管理', 'fa-cubes', '/goods', null, '2019-07-31 16:30:49', '2019-07-31 16:31:21');
+INSERT INTO `admin_menu` VALUES ('9', '8', '0', 'API数据源', 'fa-internet-explorer', '/api_datas', null, '2019-08-05 11:45:46', '2019-08-05 11:45:46');
 
 -- ----------------------------
 -- Table structure for admin_operation_log
@@ -243,6 +244,45 @@ CREATE TABLE `admin_user_permissions` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for api_datas
+-- ----------------------------
+DROP TABLE IF EXISTS `api_datas`;
+CREATE TABLE `api_datas` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '对接API名称',
+  `auth_url` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data_url` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `auth_params` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `data_params` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `translate` text COLLATE utf8mb4_unicode_ci COMMENT '字段转换规则',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of api_datas
+-- ----------------------------
+INSERT INTO `api_datas` VALUES ('1', 'IBK电商', 'http://www.ibk365.com:23022/api/thirdparty/token', 'http://www.ibk365.com:23022/api/thirdparty/goodsInfo', '[{\"key\":\"username\",\"value\":\"gpm_admin\"},{\"key\":\"password\",\"value\":\"gpm_7080\"}]', null, '[]', '2019-08-05 17:24:06', '2019-08-05 17:33:18');
+
+-- ----------------------------
+-- Table structure for api_data_details
+-- ----------------------------
+DROP TABLE IF EXISTS `api_data_details`;
+CREATE TABLE `api_data_details` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `api_id` int(11) NOT NULL,
+  `data` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of api_data_details
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for goods
 -- ----------------------------
 DROP TABLE IF EXISTS `goods`;
@@ -294,7 +334,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of migrations
@@ -303,6 +343,7 @@ INSERT INTO `migrations` VALUES ('1', '2014_10_12_000000_create_users_table', '1
 INSERT INTO `migrations` VALUES ('2', '2014_10_12_100000_create_password_resets_table', '1');
 INSERT INTO `migrations` VALUES ('3', '2016_01_04_173148_create_admin_tables', '1');
 INSERT INTO `migrations` VALUES ('5', '2019_07_31_160552_create_goods_table', '2');
+INSERT INTO `migrations` VALUES ('8', '2019_08_05_112037_create_api_datas_table', '3');
 
 -- ----------------------------
 -- Table structure for password_resets

@@ -3,6 +3,7 @@
 namespace App\Admin\Actions\Post;
 
 use App\Models\ApiData;
+use App\Models\Microservice\MicroserviceAPI;
 use Encore\Admin\Actions\RowAction;
 use GuzzleHttp\Client;
 
@@ -17,9 +18,10 @@ class SyncData extends RowAction
         return $this->response()->success('Success message.')->refresh();
     }
 
-    public function getToken()
+    public function getToken(ApiData $apiData)
     {
-        $clinet=new Client();
+        $client=new MicroserviceAPI('',$apiData->auth_url);
+        $result=$client->action('POST','',$apiData->auth_params);
     }
 
 }
