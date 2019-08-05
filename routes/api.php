@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 
 $api = app('Dingo\Api\Routing\Router');
 
@@ -12,5 +11,8 @@ $api->version('v1', [
     $api->get('version', function () {
         return '1.0.19.4.25';
     });
+    $api->resource('goods',GoodsController::class);
+    $api->get('suppliers','GoodsController@suppliers');
+    $api->get('repositories','GoodsController@repositories');
 
 });

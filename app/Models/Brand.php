@@ -32,4 +32,9 @@ class Brand extends Model
     {
         return new static;
     }
+
+    public function getList()
+    {
+        return Good::query()->groupBy('brand')->pluck('brand');
+    }
 }

@@ -10,9 +10,13 @@ Route::group([
     'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
 
-    $router->get('/', 'HomeController@index')->name('admin.home');
+    $router->get('/', function (){
+        return redirect('/admin/goods');
+    });
+    $router->get('/home', 'HomeController@index')->name('admin.home');
     $router->resource('goods', GoodsController::class);
     $router->resource('brands', BrandsController::class);
     $router->resource('suppliers', SuppliersController::class);
+    $router->resource('api_datas', ApiDatasController::class);
 
 });

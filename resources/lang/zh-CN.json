@@ -27,5 +27,11 @@
   "Days": "货期",
   "Comment": "备注",
   "Extra1": "备用字段1",
-  "Extra2": "备用字段2"
+  "Extra2": "备用字段2",
+  "Name": "API名称",
+  "Data url": "API地址",
+  "Auth url": "认证地址",
+  "Data Params": "请求参数",
+  "Auth Params": "认证参数",
+  "Translate": "转换规则"
 }

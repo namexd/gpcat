@@ -31,4 +31,9 @@ class Supplier extends Model
     {
         return new static;
     }
+
+    public function getList()
+    {
+        return Good::query()->groupBy('supplier')->pluck('supplier');
+    }
 }
