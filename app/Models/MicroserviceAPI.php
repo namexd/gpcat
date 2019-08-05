@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Microservice;
+namespace App\Models;
 
 use Exception;
 use GuzzleHttp\Client;
@@ -10,20 +10,18 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 class MicroserviceAPI
 {
-    public $access = '';
+    public $header = '';
     private $api_server = '';
 
-    public function __construct($access, $api_server = null)
+    public function __construct($header=[], $api_server = null)
     {
-        $this->access = $access;
+        $this->header = $header;
         $this->api_server = $api_server ?? '';
     }
 
     public function get($params)
     {
-        $header = [
-            'access' => $this->access,
-        ];
+        $header = $this->header;
         $options = [
             'query' => $params,
             'headers' => $header,
@@ -34,9 +32,7 @@ class MicroserviceAPI
 
     public function post($params)
     {
-        $header = [
-            'access' => $this->access,
-        ];
+        $header = $this->header;
         $options = [
             'form_params' => $params,
             'headers' => $header,
@@ -46,9 +42,7 @@ class MicroserviceAPI
 
     public function put($params)
     {
-        $header = [
-            'access' => $this->access,
-        ];
+        $header =$this->header;
         $options = [
             'form_params' => $params,
             'headers' => $header,
@@ -58,9 +52,7 @@ class MicroserviceAPI
 
     public function delete($params)
     {
-        $header = [
-            'access' => $this->access,
-        ];
+        $header = $this->header;
         $options = [
             'form_params' => $params,
             'headers' => $header,
@@ -91,7 +83,6 @@ class MicroserviceAPI
             return $response->getBody()->getContents();
         }
         catch (RequestException $exception) {
-
             if($exception->getResponse() ==null)
             {
                 $content['status_code'] = 500;

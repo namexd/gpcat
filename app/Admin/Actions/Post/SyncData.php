@@ -3,9 +3,7 @@
 namespace App\Admin\Actions\Post;
 
 use App\Models\ApiData;
-use App\Models\Microservice\MicroserviceAPI;
 use Encore\Admin\Actions\RowAction;
-use GuzzleHttp\Client;
 
 class SyncData extends RowAction
 {
@@ -13,15 +11,9 @@ class SyncData extends RowAction
 
     public function handle(ApiData $apiData)
     {
-        // $model ...
-
-        return $this->response()->success('Success message.')->refresh();
+        dispatch(new \App\Jobs\SyncData($apiData));
+        return $this->response()->success('已加入同步队列,请稍后查看')->refresh();
     }
 
-    public function getToken(ApiData $apiData)
-    {
-        $client=new MicroserviceAPI('',$apiData->auth_url);
-        $result=$client->action('POST','',$apiData->auth_params);
-    }
 
 }

@@ -33,5 +33,6 @@
   "Auth url": "认证地址",
   "Data Params": "请求参数",
   "Auth Params": "认证参数",
-  "Translate": "转换规则"
+  "Translate": "转换规则",
+  "Method": "请求方式"
 }

@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class ApiData extends Model
 {
+    public function detail()
+    {
+        return $this->hasOne(ApiDataDetail::class,'api_id','id');
+    }
+
     public function getTranslateAttribute($translate)
     {
         return array_values(json_decode($translate, true) ?: []);

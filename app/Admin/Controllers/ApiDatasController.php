@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Post\Replicate;
 use App\Admin\Actions\Post\SyncData;
 use App\Models\ApiData;
 use Encore\Admin\Controllers\AdminController;
@@ -28,15 +29,17 @@ class ApiDatasController extends AdminController
         $grid = new Grid(new ApiData);
 
         $grid->column('id', __('Id'));
-        $grid->column('name', __('Name'));
-        $grid->column('auth_url', __('Auth url'));
-        $grid->column('data_url', __('Data url'));
+        $grid->column('name', __('Name'))->editable();
+        $grid->column('method', __('Method'))->editable();
+        $grid->column('auth_url', __('Auth url'))->editable();
+        $grid->column('data_url', __('Data url'))->editable();
         $grid->column('auth_params', __('Auth Params'))->table();
         $grid->column('data_params', __('Data Params'))->table();
         $grid->column('translate', __('Translate'))->table();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
         $grid->actions(function ($actions) {
+            $actions->add(new Replicate());
             $actions->add(new SyncData());
         });
         return $grid;
@@ -54,11 +57,18 @@ class ApiDatasController extends AdminController
 
         $show->field('id', __('Id'));
         $show->field('name', __('Name'));
+        $show->field('method', __('Method'));
         $show->field('auth_url', __('Auth url'));
         $show->field('data_url', __('Data url'));
-        $show->field('auth_params', __('Auth Params'));
-        $show->field('data_params', __('Data Params'));
-        $show->field('translate', __('Translate'));
+        $show->field('auth_params', __('Auth Params'))->as(function ($value){
+            return json_encode($value);
+        })->json();
+        $show->field('data_params', __('Data Params'))->as(function ($value){
+            return json_encode($value);
+        })->json();
+        $show->field('translate', __('Translate'))->as(function ($value){
+            return json_encode($value);
+        })->json();
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -75,6 +85,7 @@ class ApiDatasController extends AdminController
         $form = new Form(new ApiData);
 
         $form->text('name', __('Name'));
+        $form->text('method', __('Method'));
         $form->url('auth_url', __('Auth url'));
         $form->url('data_url', __('Data url'));
         $form->table('auth_params', __('Auth Params'),function ($table){
