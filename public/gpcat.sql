@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
+Source Server         : localhost_3306
 Source Server Version : 50553
 Source Host           : localhost:3306
 Source Database       : gpcat
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-08-05 18:03:34
+Date: 2019-08-05 21:12:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -257,13 +257,16 @@ CREATE TABLE `api_datas` (
   `translate` text COLLATE utf8mb4_unicode_ci COMMENT '字段转换规则',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `method` varchar(10) CHARACTER SET utf8 DEFAULT 'GET',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of api_datas
 -- ----------------------------
-INSERT INTO `api_datas` VALUES ('1', 'IBK电商', 'http://www.ibk365.com:23022/api/thirdparty/token', 'http://www.ibk365.com:23022/api/thirdparty/goodsInfo', '[{\"key\":\"username\",\"value\":\"gpm_admin\"},{\"key\":\"password\",\"value\":\"gpm_7080\"}]', null, '[]', '2019-08-05 17:24:06', '2019-08-05 17:33:18');
+INSERT INTO `api_datas` VALUES ('1', 'IBK电商', 'http://www.ibk365.com:23022/api/thirdparty/token', 'http://www.ibk365.com:23022/api/thirdparty/goodsInfo', '[{\"key\":\"username\",\"value\":\"gpm_admin\"},{\"key\":\"password\",\"value\":\"gpm_7080\"}]', null, '[]', '2019-08-05 17:24:06', '2019-08-05 17:33:18', 'GET');
+INSERT INTO `api_datas` VALUES ('2', '新日升', '', 'http://113.106.232.85:9090/api/Strong/querygetmsmprice', '[]', '[{\"key\":\"aKey\",\"value\":\"25548E460EC24150B324DB5139DB05E4\"},{\"key\":\"SKU\"}]', '[]', '2019-08-05 20:43:50', '2019-08-05 21:00:29', 'POST');
+INSERT INTO `api_datas` VALUES ('3', '轴承巴士', '', 'http://www.bearingbus.com/api_united.php', '[]', '[{\"key\":\"action\",\"value\":\"getAll\"},{\"key\":\"code\",\"value\":\"gpmro1985\"}]', '[]', '2019-08-05 20:46:10', '2019-08-05 20:47:27', 'GET');
 
 -- ----------------------------
 -- Table structure for api_data_details
@@ -280,6 +283,24 @@ CREATE TABLE `api_data_details` (
 
 -- ----------------------------
 -- Records of api_data_details
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for failed_jobs
+-- ----------------------------
+DROP TABLE IF EXISTS `failed_jobs`;
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of failed_jobs
 -- ----------------------------
 
 -- ----------------------------
@@ -326,6 +347,29 @@ INSERT INTO `goods` VALUES ('15', 'NMB', '/img/nmb.jpg', '调心球轴承', 'NMB
 INSERT INTO `goods` VALUES ('16', 'NSK', 'images/文件导出-微服务.jpeg', '圆柱滚子轴承', 'NMB 606ZZR-1760X2KKRP0P24LY121（C）', '48797', '套', '泰国', '3.35', '3.50', '4.23', '商包', '荣升富达', '华南仓', '5K', '2258*253.3*36.2', '4564.000', '456.000', '56.000', '0.589', '5天', null, null, null, '2019-08-02 09:20:15', '2019-08-02 09:20:40');
 
 -- ----------------------------
+-- Table structure for jobs
+-- ----------------------------
+DROP TABLE IF EXISTS `jobs`;
+CREATE TABLE `jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `queue` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attempts` tinyint(3) unsigned NOT NULL,
+  `reserved_at` int(10) unsigned DEFAULT NULL,
+  `available_at` int(10) unsigned NOT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `jobs_queue_index` (`queue`)
+) ENGINE=MyISAM AUTO_INCREMENT=14620 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of jobs
+-- ----------------------------
+INSERT INTO `jobs` VALUES ('14617', 'default', '{\"displayName\":\"App\\\\Jobs\\\\SyncData\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"timeout\":null,\"timeoutAt\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\SyncData\",\"command\":\"O:17:\\\"App\\\\Jobs\\\\SyncData\\\":8:{s:10:\\\"\\u0000*\\u0000apiData\\\";O:45:\\\"Illuminate\\\\Contracts\\\\Database\\\\ModelIdentifier\\\":3:{s:5:\\\"class\\\";s:18:\\\"App\\\\Models\\\\ApiData\\\";s:2:\\\"id\\\";i:1;s:10:\\\"connection\\\";s:5:\\\"mysql\\\";}s:6:\\\"\\u0000*\\u0000job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:5:\\\"delay\\\";N;s:7:\\\"chained\\\";a:0:{}}\"}}', '255', '1565010725', '1565010725', '1565010725');
+INSERT INTO `jobs` VALUES ('14619', 'default', '{\"displayName\":\"App\\\\Jobs\\\\SyncData\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"timeout\":null,\"timeoutAt\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\SyncData\",\"command\":\"O:17:\\\"App\\\\Jobs\\\\SyncData\\\":8:{s:10:\\\"\\u0000*\\u0000apiData\\\";O:45:\\\"Illuminate\\\\Contracts\\\\Database\\\\ModelIdentifier\\\":3:{s:5:\\\"class\\\";s:18:\\\"App\\\\Models\\\\ApiData\\\";s:2:\\\"id\\\";i:3;s:10:\\\"connection\\\";s:5:\\\"mysql\\\";}s:6:\\\"\\u0000*\\u0000job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:5:\\\"delay\\\";N;s:7:\\\"chained\\\";a:0:{}}\"}}', '255', null, '1565010725', '1565010725');
+INSERT INTO `jobs` VALUES ('14618', 'default', '{\"displayName\":\"App\\\\Jobs\\\\SyncData\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"timeout\":null,\"timeoutAt\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\SyncData\",\"command\":\"O:17:\\\"App\\\\Jobs\\\\SyncData\\\":8:{s:10:\\\"\\u0000*\\u0000apiData\\\";O:45:\\\"Illuminate\\\\Contracts\\\\Database\\\\ModelIdentifier\\\":3:{s:5:\\\"class\\\";s:18:\\\"App\\\\Models\\\\ApiData\\\";s:2:\\\"id\\\";i:2;s:10:\\\"connection\\\";s:5:\\\"mysql\\\";}s:6:\\\"\\u0000*\\u0000job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:5:\\\"delay\\\";N;s:7:\\\"chained\\\";a:0:{}}\"}}', '255', null, '1565010725', '1565010725');
+
+-- ----------------------------
 -- Table structure for migrations
 -- ----------------------------
 DROP TABLE IF EXISTS `migrations`;
@@ -334,7 +378,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of migrations
@@ -344,6 +388,8 @@ INSERT INTO `migrations` VALUES ('2', '2014_10_12_100000_create_password_resets_
 INSERT INTO `migrations` VALUES ('3', '2016_01_04_173148_create_admin_tables', '1');
 INSERT INTO `migrations` VALUES ('5', '2019_07_31_160552_create_goods_table', '2');
 INSERT INTO `migrations` VALUES ('8', '2019_08_05_112037_create_api_datas_table', '3');
+INSERT INTO `migrations` VALUES ('9', '2019_08_05_202226_create_jobs_table', '4');
+INSERT INTO `migrations` VALUES ('10', '2019_08_05_210557_create_failed_jobs_table', '5');
 
 -- ----------------------------
 -- Table structure for password_resets
