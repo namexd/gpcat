@@ -5,6 +5,7 @@ namespace App\Models;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 
@@ -79,7 +80,7 @@ class MicroserviceAPI
 
         $client = new Client();
         try {
-            $response = $client->$method($this->api_server . $function, $options);
+            $response = $client->request($method,$this->api_server . $function, $options);
             return $response->getBody()->getContents();
         }
         catch (RequestException $exception) {
@@ -99,6 +100,8 @@ class MicroserviceAPI
             return json_encode($content);
         } catch (Exception $exception) {
             return json_encode($exception);
+        } catch (GuzzleException $e) {
+            return $e->getMessage();
         }
         return null;
     }

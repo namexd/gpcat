@@ -28,7 +28,7 @@ class CreateApiDatasTable extends Migration
         Schema::create('api_data_details', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('api_id');
-            $table->text('data')->nullable();
+            $table->longText('result')->nullable();
             $table->timestamps();
         });
     }

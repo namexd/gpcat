@@ -12,6 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class SyncData implements ShouldQueue
 {
@@ -50,8 +51,12 @@ class SyncData implements ShouldQueue
             }
         }
         $result=$client->action($this->apiData->method,'',$params);
-        $this->apiData->detail()->create(['data'=>count(json_decode($result,true)['data'])]);
+        $results=json_decode($result,true)['data'];
+        foreach ($results as $v)
+        {
+            ApiDataDetail::updateOrCreate(['api_id'=>$this->apiData->id],['result'=>json_encode($v)]);
 
+        }
     }
 
     public function getToken(ApiData $apiData)

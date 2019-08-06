@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class ApiDataDetail extends Model
 {
+    protected $fillable = ['api_id', 'result'];
+    protected $guarded = [];
 
     public function api()
     {
-        return $this->belongsTo(ApiData::class,'api_id','id');
+        return $this->belongsTo(ApiData::class, 'api_id', 'id');
     }
 }
