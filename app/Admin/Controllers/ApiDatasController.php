@@ -4,11 +4,15 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Post\Replicate;
 use App\Admin\Actions\Post\SyncData;
+use App\Admin\Actions\Post\TransformData;
 use App\Models\ApiData;
+use App\Models\ApiDataDetail;
+use App\Models\Good;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\Log;
 
 class ApiDatasController extends AdminController
 {
@@ -41,6 +45,7 @@ class ApiDatasController extends AdminController
         $grid->actions(function ($actions) {
             $actions->add(new Replicate());
             $actions->add(new SyncData());
+            $actions->add(new TransformData());
         });
         return $grid;
     }

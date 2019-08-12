@@ -67,26 +67,34 @@ class GoodsController extends AdminController
         });
         $grid->exporter(new PostsExporter());
         $grid->column('id', __('Id'));
-        $grid->column('brand', __('Brand'))->filter($good->getFilters('brand'))->sortable();
+        $grid->column('brand', __('Brand'))
+            ->filter('like')->sortable();
         $grid->column('image', __('Image'))->image('',100, 100);
-        $grid->column('type', __('Type'))->filter($good->getFilters('type'));
-        $grid->column('model', __('Model'))->filter($good->getFilters('model'));
+        $grid->column('type', __('Type'))
+            ->filter('like');
+        $grid->column('model', __('Model'))
+            ->filter('like');
         $grid->column('number', __('Number'))->sortable();
-        $grid->column('unit', __('Unit'))->filter($good->getFilters('unit'));
-        $grid->column('product_area', __('Product area'))->filter($good->getFilters('product_area'));
+        $grid->column('unit', __('Unit'))
+            ->filter('like');
+        $grid->column('product_area', __('Product area'))
+            ->filter('like');
         $grid->column('price', __('Price'))->sortable();
         $grid->column('price_a', __('Price a'))->sortable();
         $grid->column('price_b', __('Price b'))->sortable();
         $grid->column('package', __('Package'))->sortable();
-        $grid->column('supplier', __('Supplier'))->filter($good->getFilters('supplier'));
-        $grid->column('repository', __('Repository'))->filter($good->getFilters('repository'));
+        $grid->column('supplier', __('Supplier'))
+            ->filter('like');
+        $grid->column('repository', __('Repository'))
+        ->filter('like');
         $grid->column('oil', __('Oil'))->sortable();
-        $grid->column('size', __('Size'))->filter($good->getFilters('size'))->sortable();
+        $grid->column('size', __('Size'));
         $grid->column('inner_diameter', __('Inner diameter'))->sortable();
         $grid->column('out_diameter', __('Out diameter'))->sortable();
         $grid->column('width', __('Width'))->sortable();
         $grid->column('weight', __('Weight'))->sortable();
-        $grid->column('days', __('Days'))->filter($good->getFilters('days'))->sortable();
+        $grid->column('days', __('Days'))
+            ->filter($good->getFilters('days'))->sortable();
         $grid->column('comment', __('Comment'));
 //        $grid->column('extra1', __('Extra1'));
 //        $grid->column('extra2', __('Extra2'));

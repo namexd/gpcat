@@ -19,7 +19,13 @@ class SyncData implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $apiData;
-
+    public $tries = 5;
+    /**
+     * 任务可以执行的最大秒数 (超时时间)。
+     *
+     * @var int
+     */
+    public $timeout = 120;
     /**
      * Create a new job instance.
      *
@@ -27,7 +33,7 @@ class SyncData implements ShouldQueue
      */
     public function __construct(ApiData $apiData)
     {
-        $this->apiData=$apiData;
+        $this->apiData = $apiData;
     }
 
     /**
@@ -38,48 +44,41 @@ class SyncData implements ShouldQueue
      */
     public function handle()
     {
-        $token=$this->getToken($this->apiData);
-        $client=new MicroserviceAPI(['token'=>$token],$this->apiData->data_url);
-        $params=[];
-        if ($this->apiData->data_params)
-        {
-            foreach ($this->apiData->data_params as $data_param)
-            {
-                $params+=[
-                    $data_param['key']=>$data_param['value']
+        $token = $this->getToken($this->apiData);
+        Log::info('请求开始：'.Carbon::now()->toDateTimeString());
+        $client = new MicroserviceAPI(['token' => $token], $this->apiData->data_url);
+        $params = [];
+        if ($this->apiData->data_params) {
+            foreach ($this->apiData->data_params as $data_param) {
+                $params += [
+                    $data_param['key'] => $data_param['value']
                 ];
             }
         }
-        $result=$client->action($this->apiData->method,'',$params);
-        $results=json_decode($result,true)['data'];
-        foreach ($results as $v)
-        {
-            ApiDataDetail::updateOrCreate(['api_id'=>$this->apiData->id],['result'=>json_encode($v)]);
-
-        }
+        $result = $client->action($this->apiData->method, '', $params);
+        $results = json_decode($result, true)['data'];
+        Log::info('响应完成：'.Carbon::now()->toDateTimeString());
+        Cache::put('api_data'.$this->apiData->id,$results,Carbon::now()->addMinutes(10));
+        dispatch((new SaveData($this->apiData))->onQueue('high'));
     }
 
     public function getToken(ApiData $apiData)
     {
-        if ($token=Cache::get('tokenfromid'.$apiData->id))
-        {
+        if ($token = Cache::get('tokenfromid'.$apiData->id)) {
             return $token;
-        }else
-        {
-            $params=[];
-            if ($apiData->auth_params)
-            {
-                foreach ($apiData->auth_params as $auth_param)
-                {
-                    $params+=[
-                        $auth_param['key']=>$auth_param['value']
+        } else {
+            $params = [];
+            if ($apiData->auth_params) {
+                foreach ($apiData->auth_params as $auth_param) {
+                    $params += [
+                        $auth_param['key'] => $auth_param['value']
                     ];
                 }
             }
-            $client=new MicroserviceAPI([],$apiData->auth_url);
-            $result=$client->action('POST','',$params);
-            $result= json_decode($result,true);
-            Cache::put('tokenfromid'.$apiData->id,$result['data']['token'],Carbon::now()->addSeconds($result['data']['expire']/1000));
+            $client = new MicroserviceAPI([], $apiData->auth_url);
+            $result = $client->action('POST', '', $params);
+            $result = json_decode($result, true);
+            Cache::put('tokenfromid'.$apiData->id, $result['data']['token'], Carbon::now()->addSeconds($result['data']['expire'] / 1000));
             return $result['data']['token'];
         }
 

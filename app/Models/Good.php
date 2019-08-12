@@ -28,6 +28,7 @@ class Good extends Model
         'weight' ,
         'days' ,
         'comment',
+        'name'
     ];
 
     public function getFilters($column)
