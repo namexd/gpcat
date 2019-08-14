@@ -100,7 +100,7 @@ class GoodsController extends AdminController
 //        $grid->column('extra2', __('Extra2'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
-
+        $grid->fixColumns(0, -1);
         return $grid;
     }
 
