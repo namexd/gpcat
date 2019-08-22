@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Post\DeleteData;
+use App\Admin\Actions\Post\DownloadTemplate;
 use App\Admin\Actions\Post\ImportPost;
 use App\Admin\Extensions\PostsExporter;
 use App\Models\Good;
@@ -11,8 +13,8 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Row;
 use Encore\Admin\Show;
-use Encore\Admin\Widgets\Box;
 use Encore\Admin\Widgets\InfoBox;
+use Illuminate\Http\Request;
 
 class GoodsController extends AdminController
 {
@@ -32,20 +34,20 @@ class GoodsController extends AdminController
     {
         $good=new Good;
         $grid = new Grid($good);
-        $grid->quickSearch('brand', 'model', 'supplier','repository');
+//        $grid->quickSearch('brand', 'model', 'supplier','repository');
         $grid->filter(function($filter){
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
         });
         $grid->header(function ($query) {
-            $suppliers = $query->groupBy('supplier')->get()->count();
-            $brands = $query->groupBy('brand')->get()->count();
-            $repositories = $query->groupBy('repository')->get()->count();
+            $suppliers = $query->groupBy('supplier')->whereRaw('length(supplier)>0')->get()->count();
+            $brands = $query->groupBy('brand')->whereRaw('length(brand)>0')->get()->count();
+            $repositories = $query->groupBy('repository')->whereRaw('length(repository)>0')->get()->count();
             $prices=$query->sum('price');
             $infoBox = new InfoBox($suppliers, 'users', 'aqua', '/admin/suppliers', '供应商数');
             $infoBox2 = new InfoBox($repositories, 'cubes', 'green', 'javascript:;', '仓库数');
             $infoBox3 = new InfoBox($brands, 'file', 'yellow', '/admin/brands', '品牌数');
-            $infoBox4 = new InfoBox($prices, 'money', 'red', 'javascript:;', '金额');
+            $infoBox4 = new InfoBox($prices, 'money', 'red', 'javascript:;', '金额合计');
             $row=new Row();
             $row->column(3, function (Column $column) use ($infoBox) {
                 $column->append($infoBox);
@@ -64,6 +66,8 @@ class GoodsController extends AdminController
         });
         $grid->tools(function (Grid\Tools $tools) {
             $tools->append(new ImportPost());
+            $tools->append(new DownloadTemplate());
+            $tools->append(new DeleteData());
         });
         $grid->exporter(new PostsExporter());
         $grid->column('id', __('Id'));
@@ -96,8 +100,8 @@ class GoodsController extends AdminController
         $grid->column('days', __('Days'))
             ->filter($good->getFilters('days'))->sortable();
         $grid->column('comment', __('Comment'));
-//        $grid->column('extra1', __('Extra1'));
-//        $grid->column('extra2', __('Extra2'));
+        $grid->column('extra1', __('Extra1'));
+        $grid->column('extra2', __('Extra2'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
         $grid->fixColumns(0, -1);
@@ -178,5 +182,31 @@ class GoodsController extends AdminController
 //        $form->text('extra2', __('Extra2'));
 
         return $form;
+    }
+
+    public function delete(Request $request)
+    {
+        $goods = new Good();
+        $arrys = $request->except(['_token','_action','/admin/_handle_action_']);
+        $k=0;
+        foreach ($arrys as $key => $va) {
+            if ($va!==null)
+            {
+                $k++;
+                if (in_array($key, ['number', 'price'])) {
+                    $goods = $goods->where($key, '<', $va);
+                } else {
+                    $goods = $goods->where($key, $va);
+                }
+            }
+        }
+        $count=0;
+        if ($k>0)
+        {
+            $count=$goods->count();
+            $goods->delete();
+        }
+        admin_toastr('本次删除'.$count.'条数据');
+        return redirect('admin/goods');
     }
 }

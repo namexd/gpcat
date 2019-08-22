@@ -13,6 +13,6 @@ $api->version('v1', [
     });
     $api->resource('goods',GoodsController::class);
     $api->get('suppliers','GoodsController@suppliers');
-    $api->get('repositories','GoodsController@repositories');
+    $api->get('brands','GoodsController@brands');
 
 });

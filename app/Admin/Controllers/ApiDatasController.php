@@ -47,6 +47,8 @@ class ApiDatasController extends AdminController
             $actions->add(new SyncData());
             $actions->add(new TransformData());
         });
+        $grid->fixColumns(0, -1);
+
         return $grid;
     }
 

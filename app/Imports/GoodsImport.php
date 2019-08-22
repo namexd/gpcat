@@ -3,27 +3,33 @@
 namespace App\Imports;
 
 use App\Models\Good;
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToCollection;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 
-class GoodsImport implements ToCollection
+class GoodsImport implements ToModel,WithBatchInserts,WithChunkReading,ShouldQueue
 {
-    /**
-     * @param Collection $rows
-     */
-    public function collection(Collection $rows)
+    use Importable;
+    public function model(array $row)
     {
-        $fillables = (new Good())->getFillable();
         $array = [];
-        foreach ($rows as $k => $row) {
-            if ($k > 0) {
-                foreach ($fillables as $key => $v) {
-                    $array[$v] = $row[$key];
-                }
-                Good::updateOrCreate($array,$array);
-            }
 
+        $fillables = (new Good())->getFillable();
+        foreach ($fillables as $key => $v) {
+            $array[$v] = $row[$key];
         }
-
+        return new Good($array);
     }
+    public function batchSize(): int
+    {
+        return 1000;
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
+    }
+
 }

@@ -23,7 +23,6 @@ class GoodsController extends Controller
         // search 参数用来模糊搜索商品
         if ($search = $request->input('search', '')) {
             $like = '%'.$search.'%';
-            // 模糊搜索商品标题、商品详情、SKU 标题、SKU描述
             $builder->where('brand', 'like', $like)
                 ->orWhere('type', 'like', $like)
                 ->orWhere('model', 'like', $like)
@@ -32,8 +31,8 @@ class GoodsController extends Controller
         if ($brand = $request->input('brand', '')) {
             $builder->where('brand', $brand);
         }
-        if ($repository = $request->input('repository', '')) {
-            $builder->where('repository', $repository);
+        if ($repository = $request->input('supplier', '')) {
+            $builder->where('supplier', $repository);
         }
         // 是否有提交 order 参数，如果有就赋值给 $order 变量
         // order 参数用来控制商品的排序规则
@@ -59,8 +58,8 @@ class GoodsController extends Controller
     }
 
     //临时接口
-    public function repositories()
+    public function brands()
     {
-        return $this->response->array(Good::query()->groupBy('repository')->pluck('repository'));
+        return $this->response->array(Good::query()->whereNotNull('brand')->groupBy('brand')->pluck('brand'));
     }
 }
