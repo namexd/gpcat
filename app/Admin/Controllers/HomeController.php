@@ -31,4 +31,9 @@ class HomeController extends Controller
                 });
             });
     }
+
+    public function upload(Content $content)
+    {
+        return $content->body(view('admin.import_data'));
+    }
 }

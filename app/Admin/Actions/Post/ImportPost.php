@@ -29,7 +29,7 @@ class ImportPost extends Action
     public function html()
     {
         return <<<HTML
-        <a class="btn btn-sm btn-default import-post" target="_blank"><i class="fa fa-upload"></i>导入数据</a>
+        <a class="btn btn-sm btn-default import-post" href="/admin/upload" target="_blank"><i class="fa fa-upload"></i>导入数据</a>
 HTML;
     }
 }

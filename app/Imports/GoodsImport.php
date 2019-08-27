@@ -24,7 +24,7 @@ class GoodsImport implements ToModel,WithBatchInserts,WithChunkReading,ShouldQue
     }
     public function batchSize(): int
     {
-        return 1000;
+        return 1000000;
     }
 
     public function chunkSize(): int

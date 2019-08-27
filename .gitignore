@@ -11,3 +11,4 @@ npm-debug.log
 yarn-error.log
 .env
 public/uploads/
+app/Admin/Controllers/之前开发的对接文件PriceController.class.php

@@ -57,9 +57,9 @@ class TransformData implements ShouldQueue
                         $origin=$result[$item['origin']];
                     }
                     $attribute[$item['local']] = $origin;
+                    $attribute['supplier']=$this->apiData->name;
                 }
-                Log::info($attribute);
-             Good::query()->updateOrCreate(array_only($attribute,['model','brand']),$attribute);
+             Good::query()->create($attribute);
             }
 
         }

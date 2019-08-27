@@ -132,7 +132,7 @@
         var p = p;
         $.ajax({
             type: "GET",
-            url:"http://gpcat.namexd.cn/api/goods",
+            url:"{{url('api/goods')}}",
             contentType: "application/x-www-form-urlencoded",
             dataType: 'JSON',
             data:{page:p,search:search,supplier:supplier,brand:brand,order:order},
@@ -291,7 +291,7 @@
         var cs_more = '';
         $.ajax({
             type: "GET",
-            url:"http://gpcat.namexd.cn/api/suppliers",
+            url:"{{url('api/suppliers')}}",
             contentType: "application/x-www-form-urlencoded",
             dataType: 'JSON',
             success:function(ret){
@@ -316,7 +316,7 @@
         var html='';
         $.ajax({
             type: "GET",
-            url:"http://gpcat.namexd.cn/api/brands",
+            url:"{{url('api/brands')}}",
             contentType: "application/x-www-form-urlencoded",
             dataType: 'JSON',
             success:function(ret){

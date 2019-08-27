@@ -14,5 +14,6 @@ $api->version('v1', [
     $api->resource('goods',GoodsController::class);
     $api->get('suppliers','GoodsController@suppliers');
     $api->get('brands','GoodsController@brands');
+    $api->post('upload/upload_file','UploadController@uploadFile');
 
 });

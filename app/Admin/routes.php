@@ -14,6 +14,7 @@ Route::group([
         return redirect('/admin/goods');
     });
     $router->get('/home', 'HomeController@index')->name('admin.home');
+    $router->get('/upload','HomeController@upload');
     $router->post('goods/delete', 'GoodsController@delete');
     $router->resource('goods', GoodsController::class);
     $router->resource('brands', BrandsController::class);
