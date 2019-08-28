@@ -6,13 +6,11 @@ use App\Admin\Actions\Post\Replicate;
 use App\Admin\Actions\Post\SyncData;
 use App\Admin\Actions\Post\TransformData;
 use App\Models\ApiData;
-use App\Models\ApiDataDetail;
-use App\Models\Good;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-use Illuminate\Support\Facades\Log;
 
 class ApiDatasController extends AdminController
 {
@@ -109,5 +107,13 @@ class ApiDatasController extends AdminController
         });
 
         return $form;
+    }
+
+    public function queue($queue,Content $content)
+    {
+        return $content
+            ->title('任务进度')
+            ->body(view('queue',['queue'=>$queue])->render());
+
     }
 }

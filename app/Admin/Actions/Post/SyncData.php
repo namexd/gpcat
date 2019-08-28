@@ -18,8 +18,8 @@ class SyncData extends RowAction
 //        }
         $apiData->refresh_time=Carbon::now();
         $apiData->save();
-        dispatch(new \App\Jobs\SyncData($apiData));
-        return $this->response()->success('已加入同步队列,请稍后查看')->refresh();
+        dispatch(new \App\Jobs\SyncData($apiData))->onQueue('sync_data');
+        return $this->response()->redirect('/admin/queue/sync_data');
     }
 
 

@@ -15,5 +15,6 @@ $api->version('v1', [
     $api->get('suppliers','GoodsController@suppliers');
     $api->get('brands','GoodsController@brands');
     $api->post('upload/upload_file','UploadController@uploadFile');
+    $api->post('progress/{queue}','ProgressController@progress');
 
 });

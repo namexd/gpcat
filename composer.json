@@ -8,14 +8,16 @@
         "php": ">=7.0.0",
         "barryvdh/laravel-cors": "^0.11.2",
         "barryvdh/laravel-ide-helper": "^2.5",
-        "dingo/api": "2.0.0-beta1",
+        "dingo/api": "2.2.3",
         "encore/laravel-admin": "^1.7",
         "fideloper/proxy": "~3.3",
         "guzzlehttp/guzzle": "^6.3",
+        "imtigger/laravel-job-status-progress-view": "^0.2.0",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
         "liyu/dingo-serializer-switch": "^0.3.1",
-        "maatwebsite/excel": "^3.1"
+        "maatwebsite/excel": "^3.1",
+        "ms48/laravel-console-progress-bar": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

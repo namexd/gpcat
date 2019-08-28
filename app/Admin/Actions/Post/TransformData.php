@@ -12,9 +12,8 @@ class TransformData extends RowAction
 
     public function handle(ApiData $apiData)
     {
-        dispatch(new \App\Jobs\TransformData($apiData));
-        return $this->response()->success('已加入队列,请稍后查看')->refresh();
+        dispatch(new \App\Jobs\TransformData($apiData))->onQueue('transform_data');
+        return $this->response()->success('Success！')->redirect('/admin/queue/transform_data');
     }
-
 
 }

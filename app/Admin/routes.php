@@ -20,5 +20,5 @@ Route::group([
     $router->resource('brands', BrandsController::class);
     $router->resource('suppliers', SuppliersController::class);
     $router->resource('api_datas', ApiDatasController::class);
-
+    $router->get('/queue/{queue}', 'ApiDatasController@queue');
 });
