@@ -43,7 +43,12 @@ class BrandsController extends AdminController
         $grid->column('model', __('ModelCount'));
         $grid->column('number', __('Number'))->sortable();
         $grid->column('price', __('Price'))->sortable();
-        $grid->column('supplier', __('Supplier'));
+        $grid->column('supplierCount', '对接供应商家数')->sortable();
+        $grid->column('supplier', __('Supplier'))->display(function ($supplier) {
+
+            return explode(',',$supplier);
+
+        })->label();
         $grid->column('repository', __('RepositoryCount'));
         $grid->column('updated_at', __('Updated at'));
 

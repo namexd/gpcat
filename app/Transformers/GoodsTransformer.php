@@ -11,6 +11,7 @@ class GoodsTransformer extends TransformerAbstract
     public function transform(Good $good)
     {
         return [
+            'id'=>$good->id,
             'brand'=>$good->brand,
             'image'=>$_SERVER['HTTP_HOST'].Storage::disk('admin')->url($good->image),
             'type'=>$good->type,

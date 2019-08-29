@@ -11,7 +11,7 @@ $api->version('v1', [
     $api->get('version', function () {
         return '1.0.19.4.25';
     });
-    $api->resource('goods',GoodsController::class);
+    $api->post('goods','GoodsController@index');
     $api->get('suppliers','GoodsController@suppliers');
     $api->get('brands','GoodsController@brands');
     $api->post('upload/upload_file','UploadController@uploadFile');

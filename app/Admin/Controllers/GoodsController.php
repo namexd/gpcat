@@ -37,7 +37,6 @@ class GoodsController extends AdminController
 //        $grid->quickSearch('brand', 'model', 'supplier','repository');
         $grid->filter(function ($filter) {
             $filter->expand();
-            $filter->disableIdFilter();
             $filter->column(1 / 2, function ($filter) {
                 $filter->like('brand', __('Brand'));
                 $filter->like('model', __('Model'));

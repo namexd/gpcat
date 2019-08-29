@@ -113,7 +113,8 @@
         search = $('#search_input').val();
         supplier = $('#suppliers_input').val();
         brand = $('#brand_input').val();
-        var html='<tr><th style="padding: 15px; border: none;" class="pinpai">品牌</th>' +
+        var html='<tr><th style="padding: 15px; border: none;" class="pinpai">ID</th>' +
+            '        <th style="padding: 15px; border: none;" class="xinghao">型号</th>' +
             '        <th style="padding: 15px; border: none;" class="xinghao">型号</th>' +
             '        <th style="padding: 15px; border: none;" class="leibei">类别</th>' +
             '        <th style="padding: 15px; border: none;" class="leibei">仓库</th>' +
@@ -131,7 +132,7 @@
         var pre ='';
         var p = p;
         $.ajax({
-            type: "GET",
+            type: "POST",
             url:"{{url('api/goods')}}",
             contentType: "application/x-www-form-urlencoded",
             dataType: 'JSON',
@@ -168,6 +169,7 @@
                         }
 
                         html += '<tr>' +
+                            '          <td class="pinpai" style="width: 150px;padding:0;">' + goods.id + ' </td>\n' +
                             '          <td class="pinpai" style="width: 150px;padding:0;">' + goods.brand + ' </td>\n' +
                             '          <td class="xinghao" style=" width:150px; padding:0; overflow:hidden;">' + goods.model +'</td>' +
                             '          <td class="leibei" style="width: 110px;padding:0;">'+goods_type+'</td>\n' +
