@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\ApiData;
 use App\Models\ApiDataDetail;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -42,11 +43,16 @@ class SaveData implements ShouldQueue
         $results=Cache::get('api_data'.$this->apiData->id);
         if ($results)
         {
+            $k=0;
             $this->apiData->detail()->delete();
             foreach ($results as $v)
             {
                 ApiDataDetail::query()->create(['api_id'=>$this->apiData->id,'data'=>$v]);
+                $k++;
             }
+            $this->apiData->count=$k;
+            $this->apiData->refresh_time=Carbon::now()->toDateTimeString();
+            $this->apiData->save();
 
         }
     }

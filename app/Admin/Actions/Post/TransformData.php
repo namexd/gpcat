@@ -8,7 +8,7 @@ use Encore\Admin\Actions\RowAction;
 
 class TransformData extends RowAction
 {
-    public $name = '本地入库';
+    public $name = '同步到数据库';
 
     public function handle(ApiData $apiData)
     {

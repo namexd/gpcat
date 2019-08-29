@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('temporary.index');
 });
+Route::get('/test', function () {
+    return view('test');
+});

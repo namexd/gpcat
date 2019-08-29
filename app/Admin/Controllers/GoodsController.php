@@ -32,23 +32,48 @@ class GoodsController extends AdminController
      */
     protected function grid()
     {
-        $good=new Good;
+        $good = new Good;
         $grid = new Grid($good);
 //        $grid->quickSearch('brand', 'model', 'supplier','repository');
-        $grid->filter(function($filter){
-            // 去掉默认的id过滤器
+        $grid->filter(function ($filter) {
+            $filter->expand();
             $filter->disableIdFilter();
+            $filter->column(1 / 2, function ($filter) {
+                $filter->like('brand', __('Brand'));
+                $filter->like('model', __('Model'));
+                $filter->like('product_area', __('Product area'));
+                $filter->like('supplier', __('Supplier'));
+            });
+            $filter->column(1 / 2, function ($filter) {
+                $filter->group('number', __('Number'), function ($group) {
+                    $group->gt('大于');
+                    $group->lt('小于');
+                    $group->nlt('不小于');
+                    $group->ngt('不大于');
+                    $group->equal('等于');
+                });
+                $filter->group('price',  __('Price'),function ($group) {
+                    $group->gt('大于');
+                    $group->lt('小于');
+                    $group->nlt('不小于');
+                    $group->ngt('不大于');
+                    $group->equal('等于');
+                });
+                $filter->like('repository', __('Repository'));
+                $filter->between('created_at', __('Created at'))->datetime();
+            });
+
         });
         $grid->header(function ($query) {
             $suppliers = $query->groupBy('supplier')->whereRaw('length(supplier)>0')->get()->count();
             $brands = $query->groupBy('brand')->whereRaw('length(brand)>0')->get()->count();
             $repositories = $query->groupBy('repository')->whereRaw('length(repository)>0')->get()->count();
-            $prices=$query->sum('price');
+            $prices = $query->sum('price');
             $infoBox = new InfoBox($suppliers, 'users', 'aqua', '/admin/suppliers', '供应商数');
             $infoBox2 = new InfoBox($repositories, 'cubes', 'green', 'javascript:;', '仓库数');
             $infoBox3 = new InfoBox($brands, 'file', 'yellow', '/admin/brands', '品牌数');
             $infoBox4 = new InfoBox($prices, 'money', 'red', 'javascript:;', '金额合计');
-            $row=new Row();
+            $row = new Row();
             $row->column(3, function (Column $column) use ($infoBox) {
                 $column->append($infoBox);
             });
@@ -73,7 +98,7 @@ class GoodsController extends AdminController
         $grid->column('id', __('Id'));
         $grid->column('brand', __('Brand'))
             ->filter('like')->sortable();
-        $grid->column('image', __('Image'))->image('',100, 100);
+        $grid->column('image', __('Image'))->image('', 100, 100);
         $grid->column('type', __('Type'))
             ->filter('like');
         $grid->column('model', __('Model'))
@@ -90,7 +115,7 @@ class GoodsController extends AdminController
         $grid->column('supplier', __('Supplier'))
             ->filter('like');
         $grid->column('repository', __('Repository'))
-        ->filter('like');
+            ->filter('like');
         $grid->column('oil', __('Oil'))->sortable();
         $grid->column('size', __('Size'));
         $grid->column('inner_diameter', __('Inner diameter'))->sortable();
@@ -187,11 +212,10 @@ class GoodsController extends AdminController
     public function delete(Request $request)
     {
         $goods = new Good();
-        $arrys = $request->except(['_token','_action','/admin/_handle_action_']);
-        $k=0;
+        $arrys = $request->except(['_token', '_action', '/admin/_handle_action_']);
+        $k = 0;
         foreach ($arrys as $key => $va) {
-            if ($va!==null)
-            {
+            if ($va !== null) {
                 $k++;
                 if (in_array($key, ['number', 'price'])) {
                     $goods = $goods->where($key, '<', $va);
@@ -200,10 +224,9 @@ class GoodsController extends AdminController
                 }
             }
         }
-        $count=0;
-        if ($k>0)
-        {
-            $count=$goods->count();
+        $count = 0;
+        if ($k > 0) {
+            $count = $goods->count();
             $goods->delete();
         }
         admin_toastr('本次删除'.$count.'条数据');

@@ -29,22 +29,24 @@ class ApiDatasController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new ApiData);
+        $grid->actions(function ($actions) {
+            $actions->add(new Replicate());
+            $actions->add(new SyncData());
+            $actions->add(new TransformData());
 
+        });
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'))->editable();
         $grid->column('method', __('Method'))->editable();
         $grid->column('auth_url', __('Auth url'))->editable();
         $grid->column('data_url', __('Data url'))->editable();
-        $grid->column('auth_params', __('Auth Params'))->table();
-        $grid->column('data_params', __('Data Params'))->table();
-        $grid->column('translate', __('Translate'))->table();
+//        $grid->column('auth_params', __('Auth Params'))->table();
+//        $grid->column('data_params', __('Data Params'))->table();
+//        $grid->column('translate', __('Translate'))->table();
+        $grid->column('refresh_time', __('上次更新时间'));
+        $grid->column('count', __('上次更新数量'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
-        $grid->actions(function ($actions) {
-            $actions->add(new Replicate());
-            $actions->add(new SyncData());
-            $actions->add(new TransformData());
-        });
         $grid->fixColumns(0, -1);
 
         return $grid;
@@ -65,6 +67,9 @@ class ApiDatasController extends AdminController
         $show->field('method', __('Method'));
         $show->field('auth_url', __('Auth url'));
         $show->field('data_url', __('Data url'));
+        $show->field('header', __('Header'))->as(function ($value){
+            return json_encode($value);
+        })->json();
         $show->field('auth_params', __('Auth Params'))->as(function ($value){
             return json_encode($value);
         })->json();
@@ -93,6 +98,10 @@ class ApiDatasController extends AdminController
         $form->text('method', __('Method'));
         $form->url('auth_url', __('Auth url'));
         $form->url('data_url', __('Data url'));
+        $form->table('header', __('Header'),function ($table){
+            $table->text('key');
+            $table->text('value');
+        });
         $form->table('auth_params', __('Auth Params'),function ($table){
             $table->text('key');
             $table->text('value');

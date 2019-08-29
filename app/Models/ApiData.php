@@ -38,4 +38,13 @@ class ApiData extends Model
     {
         $this->attributes['auth_params'] = json_encode(array_values($translate));
     }
+    public function getHeaderAttribute($translate)
+    {
+        return array_values(json_decode($translate, true) ?: []);
+    }
+
+    public function setHeaderAttribute($translate)
+    {
+        $this->attributes['header'] = json_encode(array_values($translate));
+    }
 }

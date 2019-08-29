@@ -20,6 +20,7 @@ class CreateApiDatasTable extends Migration
             $table->string('data_url');
             $table->string('auth_params')->nullable();
             $table->string('data_params')->nullable();
+            $table->string('header')->nullable();
             $table->string('method')->default('GET');
             $table->text('translate')->nullable()->comment('字段转换规则');
             $table->timestamps();

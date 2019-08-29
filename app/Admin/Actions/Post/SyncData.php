@@ -8,7 +8,7 @@ use Encore\Admin\Actions\RowAction;
 
 class SyncData extends RowAction
 {
-    public $name = '更新数据';
+    public $name = '下载数据';
 
     public function handle(ApiData $apiData)
     {
