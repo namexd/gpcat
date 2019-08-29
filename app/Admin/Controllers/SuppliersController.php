@@ -40,11 +40,17 @@ class SuppliersController extends AdminController
         $grid->disableRowSelector();
         $grid->column('id', __('Id'));
         $grid->column('supplier', __('Supplier'));
-        $grid->column('brand', __('BrandCount'))->sortable();
+        $grid->column('brand', __('BrandCount'))->display(function ($value) {
+            $model = $this->brand_list;
+            return view('admin.show_detail', compact('model', 'value'))->render();
+        })->sortable();
         $grid->column('model', __('ModelCount'));
         $grid->column('number', __('Number'))->sortable();
         $grid->column('price', __('Price'))->sortable();
-        $grid->column('repository', __('RepositoryCount'));
+        $grid->column('repository', __('RepositoryCount'))->display(function ($value) {
+            $model = $this->repository_list;
+            return view('admin.show_detail', compact('model', 'value'))->render();
+        });
         $grid->column('updated_at', __('Updated at'));
 
         return $grid;

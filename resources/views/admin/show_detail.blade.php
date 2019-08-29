@@ -1,0 +1,1 @@
+<a href="javascript:;" title="{{$model}}">{{$value}}</a>

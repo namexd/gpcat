@@ -16,7 +16,7 @@ class Supplier extends Model
 
         $start = ($page-1)*$perPage;
 
-        $result = Good::query()->selectRaw('supplier,count(distinct repository) as repository,count(distinct brand) as brand,count(distinct model) as model,sum(price) as price,sum(number) as number,max(updated_at) as updated_at')->whereRaw('length(supplier)>0')->groupBy('supplier')->get()->toArray();
+        $result = Good::query()->selectRaw('supplier,group_concat(distinct repository,"","") as repository_list,group_concat(distinct brand,"","") as brand_list,count(distinct repository) as repository,count(distinct brand) as brand,count(distinct model) as model,sum(number*price) as price,sum(number) as number,max(updated_at) as updated_at')->whereRaw('length(supplier)>0')->groupBy('supplier')->get()->toArray();
 
         $brands = static::hydrate($result);
 
