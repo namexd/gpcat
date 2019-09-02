@@ -32,26 +32,8 @@ class PostsExporter extends ExcelExporter
         'weight' => '轴承重量',
         'days' => '货期',
         'comment' => '备注',
-        'created_at' => '创建时间',
+        'arrange_time' => '导入时间',
         'updated_at' => '更新时间',
     ];
 
-    public function query()
-    {
-        if (!empty($this->columns)) {
-            $columns = array_keys($this->columns);
-
-            $eagerLoads = array_keys($this->getQuery()->getEagerLoads());
-
-            $columns = collect($columns)->reject(function ($column) use ($eagerLoads) {
-                return Str::contains($column, '.') || in_array($column, $eagerLoads);
-            });
-
-            return $this->getQuery()->select($columns->toArray());
-        }
-
-        return $this->getQuery()->chunk(1000,function ($query){
-            return $query;
-        });
-    }
 }

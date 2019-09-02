@@ -59,7 +59,8 @@ class GoodsController extends AdminController
                     $group->equal('等于');
                 });
                 $filter->like('repository', __('Repository'));
-                $filter->between('created_at', __('Created at'))->datetime();
+                $filter->between('arranged_time', __('arranged_time'))->datetime();
+                $filter->between('updated_at', __('Updated at'))->datetime();
             });
 
         });
@@ -126,7 +127,7 @@ class GoodsController extends AdminController
         $grid->column('comment', __('Comment'));
         $grid->column('extra1', __('Extra1'));
         $grid->column('extra2', __('Extra2'));
-        $grid->column('created_at', __('Created at'));
+        $grid->column('arranged_time', __('arranged_time'));
         $grid->column('updated_at', __('Updated at'));
         $grid->fixColumns(0, -1);
         return $grid;
@@ -164,8 +165,9 @@ class GoodsController extends AdminController
         $show->field('weight', __('Weight'));
         $show->field('days', __('Days'));
         $show->field('comment', __('Comment'));
-//        $show->field('extra1', __('Extra1'));
-//        $show->field('extra2', __('Extra2'));
+        $show->field('extra1', __('Extra1'));
+        $show->field('extra2', __('Extra2'));
+        $show->field('arranged_time', __('arranged_time'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 

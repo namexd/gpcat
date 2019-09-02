@@ -28,7 +28,7 @@ class Good extends Model
         'weight' ,
         'days' ,
         'comment',
-        'name'
+        'arranged_time',
     ];
 
     public function getFilters($column)

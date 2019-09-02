@@ -34,5 +34,6 @@
   "Data Params": "请求参数",
   "Auth Params": "认证参数",
   "Translate": "转换规则",
-  "Method": "请求方式"
+  "Method": "请求方式",
+  "arranged_time": "导入时间"
 }

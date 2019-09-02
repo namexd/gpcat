@@ -19,7 +19,7 @@ class SyncData extends RowAction
         $apiData->refresh_time=Carbon::now();
         $apiData->save();
         dispatch(new \App\Jobs\SyncData($apiData))->onQueue('sync_data');
-        return $this->response()->redirect('/admin/queue/sync_data');
+        return $this->response()->success('开始下载..')->redirect('/admin/queue/sync_data');
     }
 
 
