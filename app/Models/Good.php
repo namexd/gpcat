@@ -28,6 +28,8 @@ class Good extends Model
         'weight' ,
         'days' ,
         'comment',
+        'extra1',
+        'extra2',
         'arranged_time',
     ];
 

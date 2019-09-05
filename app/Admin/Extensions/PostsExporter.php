@@ -32,7 +32,7 @@ class PostsExporter extends ExcelExporter
         'weight' => '轴承重量',
         'days' => '货期',
         'comment' => '备注',
-        'arrange_time' => '导入时间',
+        'arranged_time' => '导入时间',
         'updated_at' => '更新时间',
     ];
 

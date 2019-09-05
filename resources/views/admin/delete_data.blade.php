@@ -64,8 +64,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label>导入时间</label>
-                                    <input type="text" id="arrange_time" name="arrange_time"
-                                           class="form-control arrange_time action" placeholder="选择导入时间">
+                                    <input type="text" id="arrange_time" name="arranged_time"
+                                           class="form-control arranged_time action" placeholder="选择导入时间">
                                 </div>
                                 <div class="form-group">
                                     <label>更新时间</label>

@@ -23,13 +23,18 @@ class GoodsController extends Controller
         // search 参数用来模糊搜索商品
         if ($search = $request->input('search', '')) {
             $like = '%'.$search.'%';
-            $builder->where('brand', 'like', $like)
-                ->orWhere('type', 'like', $like)
-                ->orWhere('model', 'like', $like)
-                ->orWhere('supplier', 'like', $like);
+            $builder->where(function ($query) use ($like){
+                $query->where('brand', 'like', $like)
+                    ->orWhere('type', 'like', $like)
+                    ->orWhere('model', 'like', $like)
+                    ->orWhere('supplier', 'like', $like);
+            });
         }
         if ($brand = $request->input('brand', '')) {
             $builder->where('brand', $brand);
+        }
+        if ($days = $request->input('days', '')) {
+            $builder->where('days', $days);
         }
         if ($repository = $request->input('supplier', '')) {
             $builder->where('supplier', $repository);

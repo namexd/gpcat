@@ -127,8 +127,8 @@ class GoodsController extends AdminController
         $grid->column('comment', __('Comment'));
         $grid->column('extra1', __('Extra1'));
         $grid->column('extra2', __('Extra2'));
-        $grid->column('arranged_time', __('arranged_time'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('arranged_time', __('arranged_time'))->sortable();
+        $grid->column('updated_at', __('Updated at'))->sortable();
         $grid->fixColumns(0, -1);
         return $grid;
     }

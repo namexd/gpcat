@@ -14,6 +14,7 @@
 <input type="hidden" id="page_input" value="" />
 <input type="hidden" id="suppliers_input" value=""/>
 <input type="hidden" id="brand_input" value="" />
+<input type="hidden" id="days_input" value="" />
 <input type="hidden" id="search_input" value="" />
   <div class="prolist">
     <table class="filters content">
@@ -30,13 +31,13 @@
 {{--            </ul>--}}
 {{--           </td>--}}
 {{--        </tr>--}}
-       <tr >
-            <td>品牌：</td>
-            <td style="padding-top: 7px;">
-                <ul id="brand_list">
-            </ul>
-            </td>
-        </tr>
+{{--       <tr >--}}
+{{--            <td>品牌：</td>--}}
+{{--            <td style="padding-top: 7px;">--}}
+{{--                <ul id="brand_list">--}}
+{{--            </ul>--}}
+{{--            </td>--}}
+{{--        </tr>--}}
       </tbody>
     </table>
   </div>
@@ -56,12 +57,24 @@
             $('#formsubmit').submit();
         })
     </script>
-  <div style="margin:auto; width:300px;">
+    <form id="search" >
+    <div class="selectstock">
+        型号：
+        <select name="brand" class="selectstockbox" id="brand_select" >
+            <option value="0">请选择型号</option>
+        </select>
+    </div>
+    <div style="margin-right: 5px;float: left">
+        <input name="days" id="days" type="text"  style="width: 100px" class="input-box2" value=""  placeholder="输入到货天数" />
+    </div>
+  <div style="margin:auto;float: left">
       <input name="keywords" id="key" type="text" class="input-box2" value=""  placeholder="请输入产品、品牌关键字" />
-      <input name="" type="submit" onclick="go_search()" value="爆款搜索" class="search-btn2" />
+      <input  type="button" onclick="go_search()" value="搜索" class="search-btn2" />
   </div>
+    </form>
   <div class="ppage"><!--<a class="p01">1/20</a><a class="p02"><</a><a class="p02">></a>--></div>
   <div class="c"></div>
+
 </div>
 <div class="c"></div>
 <div class="tish_inopro" style="line-height: 80px; font-size: 16px; padding-left: 50px;display: none;"> <img style="margin-right: 5px;width: 32px;height: 30px;vertical-align: middle;" src="http://www.gpmro.com/home/images/tsww.jpg">小编正在努力的整理资料…… </div>
@@ -107,19 +120,21 @@
     }
     //商品列表
     function get_goods() {
-        var order = '',p='',search='',supplier='',brand='';
+        var order = '',p='',search='',supplier='',brand='',days='';
         order = $('#order_input').val();
         p = $('#page_input').val();
         search = $('#search_input').val();
         supplier = $('#suppliers_input').val();
         brand = $('#brand_input').val();
+        days = $('#days_input').val();
         var html='<tr><th style="padding: 15px; border: none;" class="pinpai">ID</th>' +
-            '        <th style="padding: 15px; border: none;" class="xinghao">型号</th>' +
+            '        <th style="padding: 15px; border: none;" class="xinghao">品牌</th>' +
             '        <th style="padding: 15px; border: none;" class="xinghao">型号</th>' +
             '        <th style="padding: 15px; border: none;" class="leibei">类别</th>' +
             '        <th style="padding: 15px; border: none;" class="leibei">仓库</th>' +
             '        <th style="padding: 15px; border: none;" class="zhongliang">重量</th>' +
             '        <th style="padding: 15px; border: none;" class="kucun">库存</th>' +
+            '        <th style="padding: 15px; border: none;" class="qihuo">期货</th>' +
             '        <th style="padding: 15px; border: none;" class="jiage">价格</th></tr>';
         var brand_images='';
         var repository = '';
@@ -129,6 +144,7 @@
         var goods_type ='';
         var next ='';
         var next_next ='';
+        var goods_days ='';
         var pre ='';
         var p = p;
         $.ajax({
@@ -136,7 +152,7 @@
             url:"{{url('api/goods')}}",
             contentType: "application/x-www-form-urlencoded",
             dataType: 'JSON',
-            data:{page:p,search:search,supplier:supplier,brand:brand,order:order},
+            data:{page:p,search:search,supplier:supplier,brand:brand,order:order,days:days},
             success:function(ret){
                 var data = ret.data;
                 if(data.length>0){
@@ -156,16 +172,18 @@
                         }else{
                             repository = '未知';
                         }
-                        if(goods.price){
-                            price = '￥ '+goods.price;
-                        }else{
-                            price = '面议';
-                        }
+
                         if (goods.type)
                         {
                             goods_type=  goods.type;
                         }else {
                             goods_type='未知';
+                        }
+                        if (goods.days)
+                        {
+                            goods_days=  goods.days;
+                        }else {
+                            goods_days='未知';
                         }
 
                         html += '<tr>' +
@@ -175,45 +193,57 @@
                             '          <td class="leibei" style="width: 110px;padding:0;">'+goods_type+'</td>\n' +
                             '          <td class="leibei" style="width: 110px;padding:0;">'+ repository+ '</td>\n' +
                             '          <td class="zhongliang" style="width: 110px;padding:0;">'+weight+'</td>\n' +
-                            '          <td class="kucun" style="width: 110px;padding:0;">'+ goods.number +'</td>\n' +
-                            '          <td class="leibei" style="width: 110px;padding:0;"><span> '+price+'</span></td>\n' +
-                            '        </tr>'
+                            '          <td class="kucun" style="width: 110px;padding:0;">'+ goods.number +'</td>\n'+
+                            '          <td class="kucun" style="width: 110px;padding:0;">'+ goods_days +'</td>\n'
+
+                        if(goods.price_a>0){
+                            html+= '          <td class="leibei" style="width: 110px;padding:0;"><span>￥'+goods.price_a+'</span></td>\n';
+                        }else{
+                            html+= '          <td class="leibei" style="width: 110px;padding:0;"><a href="javascript:;" title="电话/微信：18051116758">请咨询</a></td>\n';
+
+                        }
+                        html+= '        </tr>'
                     });
                     $('#goods_list').html(html);
-                }
-                var page = ret.meta;
-                var current_page = page.pagination.current_page;
-                var total_pages = page.pagination.total_pages;
-                var num_page = 0;
-                if(current_page >6){
-                    num_page =current_page-1;
-                    page_html += '<a class="first" onclick="page(1)">1...</a>'+
-                        '<a class="prev" onclick="page('+ num_page +')">&lt;&lt;</a>';
-                }else if(current_page>1){
-                    num_page =current_page-1;
-                    page_html +='<a class="prev" onclick="page('+ num_page +')">&lt;&lt;</a>';
-                }else{
-                    page_html +='<a class="prev" onclick="page('+ current_page +')">&lt;&lt;</a>';
-                }
-                for(var i=1,j=5;i<=5;i++,j--){
-                    num_page = current_page-j;
-                    if(0 < num_page){
-                        pre += '<a class="num" onclick="page('+ num_page +')">'+ num_page+'</a>';
+                    var page = ret.meta;
+                    var current_page = page.pagination.current_page;
+                    var total_pages = page.pagination.total_pages;
+                    var num_page = 0;
+                    if(current_page >6){
+                        num_page =current_page-1;
+                        page_html += '<a class="first" onclick="page(1)">1...</a>'+
+                            '<a class="prev" onclick="page('+ num_page +')">&lt;&lt;</a>';
+                    }else if(current_page>1){
+                        num_page =current_page-1;
+                        page_html +='<a class="prev" onclick="page('+ num_page +')">&lt;&lt;</a>';
+                    }else{
+                        page_html +='<a class="prev" onclick="page('+ current_page +')">&lt;&lt;</a>';
                     }
-                    num_page = current_page+i;
-                    if(total_pages>=num_page){
-                        next += '<a class="num" onclick="page('+ num_page +')">'+ num_page+'</a>';
+                    for(var i=1,j=5;i<=5;i++,j--){
+                        num_page = current_page-j;
+                        if(0 < num_page){
+                            pre += '<a class="num" onclick="page('+ num_page +')">'+ num_page+'</a>';
+                        }
+                        num_page = current_page+i;
+                        if(total_pages>=num_page){
+                            next += '<a class="num" onclick="page('+ num_page +')">'+ num_page+'</a>';
+                        }
+                        num_page = current_page+5+i;
+                        if(current_page<6&&num_page<13&&num_page<=total_pages){
+                            next_next += '<a class="num" onclick="page('+ num_page +')">'+ num_page+'</a>';
+                        }
                     }
-                    num_page = current_page+5+i;
-                    if(current_page<6&&num_page<13&&num_page<=total_pages){
-                        next_next += '<a class="num" onclick="page('+ num_page +')">'+ num_page+'</a>';
-                    }
+                    page_html = page_html+pre +
+                        '<span class="current">'+current_page+'</span>'+
+                        next+next_next+'<a class="next"onclick="page('+ current_page+1 +')">&gt;&gt;</a>'+ '<a class="end"  onclick="page('+ total_pages +')">'+
+                        total_pages +'</a>';
+                    $('#page').html(page_html);
                 }
-                page_html = page_html+pre +
-                    '<span class="current">'+current_page+'</span>'+
-                    next+next_next+'<a class="next"onclick="page('+ current_page+1 +')">&gt;&gt;</a>'+ '<a class="end"  onclick="page('+ total_pages +')">'+
-                    total_pages +'</a>';
-                $('#page').html(page_html);
+                else {
+                    $('#page').empty();
+                    $('#goods_list').html( '<div style="text-align: center">暂无数据</div>');
+                }
+
             }
         });
     }
@@ -227,8 +257,10 @@
         $('#search_input').val(key_words);
         $('#page_input').val(1);
         $('#order_input').val('');
-        $('#suppliers_input').val('');
-        $('#brand_input').val('');
+        // $('#suppliers_input').val('');
+        $('#brand_input').val($("#brand_select").val());
+        $('#days_input').val($("#days").val());
+        console.log($("#days").val())
         go_order(0);
     }
     function go_order(a) {
@@ -265,10 +297,10 @@
 
     function go_suppliers(a) {
         $('#suppliers_input').val(a);
-        $('#search_input').val('');
+        // $('#search_input').val('');
         $('#page_input').val(1);
         $('#order_input').val('');
-        $('#brand_input').val('');
+        // $('#brand_input').val('');
         $('.typeIdClick').removeClass('valueListLi');
         $('.typeIdClick').removeClass('b5f8409');
         $('#'+a).addClass('b5f8409');
@@ -276,15 +308,16 @@
         go_order(0);
     }
     function go_brand(a) {
-        $('#search_input').val('');
+        // $('#search_input').val('');
         $('#page_input').val(1);
         $('#order_input').val('');
-        $('#suppliers_input').val('');
+        // $('#suppliers_input').val('');
         $('#brand_input').val(a);
         $('.typeIdClick').removeClass('valueListLi');
         $('.typeIdClick').removeClass('b5f8409');
-        $('#'+a).addClass('b5f8409');
-        $('#'+a).addClass('valueListLi');
+       var aa=document.getElementById(a)
+        aa.className +=' b5f8409';
+        aa.className +=' valueListLi';
         go_order(0);
     }
     //供应商列表
@@ -316,6 +349,7 @@
     //仓库列表
     function get_brand() {
         var html='';
+        var html2='<option   value="" >请选择型号</option>';
         $.ajax({
             type: "GET",
             url:"{{url('api/brands')}}",
@@ -325,10 +359,11 @@
                 var data = ret;
                 if(data.length>0){
                     $.each(data, function(m, brand) {
-                        html += '<li id="'+brand+'" onclick="go_brand(\''+brand+'\')" class="typeIdClick stockIdclick b5f8409">'+brand+'</li>';
+                        // html += '<li id="'+brand+'" onclick="go_brand(\''+brand+'\')" class="typeIdClick stockIdclick b5f8409">'+brand+'</li>';
+                        html2 += '<option id="'+brand+'" value="'+brand+'" >'+brand+'</option>';
                     });
-                    html += '<div class="clear-both"></div>';
-                    $('#brand_list').html(html);
+                    // html2 += '<div class="clear-both"></div>';
+                    $('#brand_select').html(html2);
                 }
             }
         });
